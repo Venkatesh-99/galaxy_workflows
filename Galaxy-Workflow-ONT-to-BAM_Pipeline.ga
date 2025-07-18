@@ -1,0 +1,260 @@
+{
+    "a_galaxy_workflow": "true",
+    "annotation": "This workflow aligns Oxford Nanopore (ONT) FASTQ reads to reference genomes using minimap2, then sorts and indexes the resulting BAM files for downstream analysis or visualization in IGV.",
+    "comments": [],
+    "creator": [
+        {
+            "class": "Person",
+            "email": "mailto:venkatesh.n.inst@cmcvellore.ac.in",
+            "identifier": "https://orcid.org/0009-0002-6589-6197",
+            "name": "Venkatesh N "
+        }
+    ],
+    "format-version": "0.1",
+    "help": "Refer Readme",
+    "license": "MIT",
+    "name": "ONT-to-BAM Pipeline",
+    "readme": "# Nanopore Genome Alignment and BAM Preparation Workflow\n\n## Description\n\nThis Galaxy workflow aligns Oxford Nanopore (ONT) sequencing reads to reference genome(s) and prepares the output for downstream analysis or visualization. It takes collections of FASTA and FASTQ files as input, performs indexing and mapping, and generates sorted and indexed BAM files compatible with tools like IGV.\n\n---\n\n## Workflow Steps\n\n1. **Input: Reference Genomes (FASTA)**\n   - Collection of genome sequences in FASTA format.\n\n2. **Input: ONT FASTQ Reads**\n   - Collection of Nanopore raw reads in FASTQ (or FASTQ.GZ) format.\n\n3. **Indexing Reference FASTA**\n   - Indexes each FASTA file using `samtools faidx` to produce `.fai` files.\n\n4. **Map Reads to Reference**\n   - Uses `minimap2` (preset: `map-ont`) to align reads to their respective references.\n   - Output: Unsorted BAM files.\n\n5. **Sort BAM Files**\n   - Sorts the BAM output by genomic coordinate using `samtools sort`.\n\n6. **Index BAM Files**\n   - Creates `.bai` index files using `samtools index`.\n\n---\n\n## Inputs\n\n- A **collection of FASTA** reference files (type: `fasta`)\n- A **collection of FASTQ** files (type: `fastq` or `fastq.gz`)\n\n> Each FASTQ should correspond to a reference FASTA.\n\n---\n\n## Outputs\n\n- **Sorted BAM** files (`.bam`)\n- **BAM index** files (`.bai`)\n- **Reference index** files (`.fai`)\n\nThese files are suitable for:\n- Visualization in **IGV**\n- Variant calling\n- Coverage analysis\n\n---\n\n## Tools Used\n\n- [`minimap2`](https://github.com/lh3/minimap2) \u2013 Long-read alignment\n- [`samtools`](http://www.htslib.org/) \u2013 Indexing and sorting (faidx, sort, index)\n\n---\n\n## Notes\n\n- Ensure read-reference pairs are correctly ordered in collections.\n- If used for bacterial genomes or small contigs, visual inspection in IGV is recommended post-alignment.\n\n---\n\n## Citation\n\nIf you use this workflow in your research, please cite:\n\n- Li, H. (2018). Minimap2: pairwise alignment for nucleotide sequences. *Bioinformatics*, 34(18), 3094\u20133100.\n- Danecek et al. (2021). Twelve years of SAMtools and BCFtools. *GigaScience*, 10(2), giab008.\n\n---\n\n## Version\n\n**Workflow version:** 3.0  \n**Last updated:** July 2025\n\n",
+    "report": {
+        "markdown": "\n# Workflow Execution Report\n\n## Workflow Inputs\n```galaxy\ninvocation_inputs()\n```\n\n## Workflow Outputs\n```galaxy\ninvocation_outputs()\n```\n\n## Workflow\n```galaxy\nworkflow_display()\n```\n"
+    },
+    "steps": {
+        "0": {
+            "annotation": "",
+            "content_id": null,
+            "errors": null,
+            "id": 0,
+            "input_connections": {},
+            "inputs": [
+                {
+                    "description": "",
+                    "name": "Reference FASTA files"
+                }
+            ],
+            "label": "Reference FASTA files",
+            "name": "Input dataset collection",
+            "outputs": [],
+            "position": {
+                "left": 1.3118286070837257,
+                "top": 125.71148833754282
+            },
+            "tool_id": null,
+            "tool_state": "{\"optional\": false, \"format\": [\"fasta\"], \"tag\": null, \"collection_type\": \"list\", \"fields\": null}",
+            "tool_version": null,
+            "type": "data_collection_input",
+            "uuid": "4d289149-559e-4567-8791-1f9496576146",
+            "when": null,
+            "workflow_outputs": []
+        },
+        "1": {
+            "annotation": "",
+            "content_id": null,
+            "errors": null,
+            "id": 1,
+            "input_connections": {},
+            "inputs": [
+                {
+                    "description": "",
+                    "name": "ONT FASTQ files"
+                }
+            ],
+            "label": "ONT FASTQ files",
+            "name": "Input dataset collection",
+            "outputs": [],
+            "position": {
+                "left": 0.0,
+                "top": 317.2738358209713
+            },
+            "tool_id": null,
+            "tool_state": "{\"optional\": false, \"tag\": null, \"collection_type\": \"list\", \"fields\": null}",
+            "tool_version": null,
+            "type": "data_collection_input",
+            "uuid": "018e0e5f-118d-41df-991c-b609873719d9",
+            "when": null,
+            "workflow_outputs": []
+        },
+        "2": {
+            "annotation": "",
+            "content_id": "CONVERTER_fasta_to_fai",
+            "errors": null,
+            "id": 2,
+            "input_connections": {
+                "input": {
+                    "id": 0,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [],
+            "label": "Indexing FASTA files",
+            "name": "Convert FASTA to fai file",
+            "outputs": [
+                {
+                    "name": "output",
+                    "type": "fai"
+                }
+            ],
+            "position": {
+                "left": 306.6438953763093,
+                "top": 0.0
+            },
+            "post_job_actions": {},
+            "tool_id": "CONVERTER_fasta_to_fai",
+            "tool_state": "{\"input\": {\"__class__\": \"ConnectedValue\"}, \"__page__\": 0, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "1.0.1",
+            "type": "tool",
+            "uuid": "2117690b-48c7-4db9-b00f-80f1d34d7b13",
+            "when": null,
+            "workflow_outputs": [
+                {
+                    "label": "output",
+                    "output_name": "output",
+                    "uuid": "6b5954c7-c513-4510-baa4-d3d5f6a8c9f6"
+                }
+            ]
+        },
+        "3": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/iuc/minimap2/minimap2/2.28+galaxy1",
+            "errors": null,
+            "id": 3,
+            "input_connections": {
+                "fastq_input|fastq_input1": {
+                    "id": 1,
+                    "output_name": "output"
+                },
+                "reference_source|ref_file": {
+                    "id": 0,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool Map with minimap2",
+                    "name": "fastq_input"
+                },
+                {
+                    "description": "runtime parameter for tool Map with minimap2",
+                    "name": "reference_source"
+                }
+            ],
+            "label": "Map reads to reference genome",
+            "name": "Map with minimap2",
+            "outputs": [
+                {
+                    "name": "alignment_output",
+                    "type": "bam"
+                }
+            ],
+            "position": {
+                "left": 303.59289360616776,
+                "top": 216.0214386831232
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/iuc/minimap2/minimap2/2.28+galaxy1",
+            "tool_shed_repository": {
+                "changeset_revision": "66367287b4e6",
+                "name": "minimap2",
+                "owner": "iuc",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"alignment_options\": {\"splicing\": {\"splice_mode\": \"preset\", \"__current_case__\": 0}, \"A\": null, \"B\": null, \"O\": null, \"O2\": null, \"E\": null, \"E2\": null, \"z\": null, \"z2\": null, \"s\": null, \"no_end_flt\": true}, \"fastq_input\": {\"fastq_input_selector\": \"single\", \"__current_case__\": 0, \"fastq_input1\": {\"__class__\": \"ConnectedValue\"}, \"analysis_type_selector\": \"map-ont\"}, \"indexing_options\": {\"H\": false, \"k\": null, \"w\": null, \"I\": null}, \"io_options\": {\"output_format\": \"BAM\", \"Q\": false, \"L\": false, \"K\": null, \"cs\": null, \"c\": false, \"eqx\": false, \"Y\": false}, \"mapping_options\": {\"N\": null, \"F\": null, \"f\": null, \"kmer_ocurrence_interval\": {\"interval\": \"\", \"__current_case__\": 1}, \"min_occ_floor\": null, \"q_occ_frac\": \"0.01\", \"g\": null, \"r\": null, \"n\": null, \"m\": null, \"max_chain_skip\": null, \"max_chain_iter\": null, \"X\": false, \"p\": null, \"mask_len\": null}, \"reference_source\": {\"reference_source_selector\": \"history\", \"__current_case__\": 1, \"ref_file\": {\"__class__\": \"ConnectedValue\"}}, \"__page__\": 0, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "2.28+galaxy1",
+            "type": "tool",
+            "uuid": "f4220f4e-30d5-40e6-89b5-d9fd7fe6e855",
+            "when": null,
+            "workflow_outputs": [
+                {
+                    "label": "alignment_output",
+                    "output_name": "alignment_output",
+                    "uuid": "85083890-6b55-46bf-a218-17382fab2cb3"
+                }
+            ]
+        },
+        "4": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/devteam/samtools_sort/samtools_sort/2.0.7",
+            "errors": null,
+            "id": 4,
+            "input_connections": {
+                "input1": {
+                    "id": 3,
+                    "output_name": "alignment_output"
+                }
+            },
+            "inputs": [],
+            "label": "Sort the BAM files",
+            "name": "Samtools sort",
+            "outputs": [
+                {
+                    "name": "output1",
+                    "type": "bam"
+                }
+            ],
+            "position": {
+                "left": 605.9794326898837,
+                "top": 139.58307559878136
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/devteam/samtools_sort/samtools_sort/2.0.7",
+            "tool_shed_repository": {
+                "changeset_revision": "f2f2650aeade",
+                "name": "samtools_sort",
+                "owner": "devteam",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"input1\": {\"__class__\": \"ConnectedValue\"}, \"minhash\": false, \"prim_key_cond\": {\"prim_key_select\": \"\", \"__current_case__\": 0}, \"__page__\": 0, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "2.0.7",
+            "type": "tool",
+            "uuid": "9aa23f20-7e3c-4354-8ed4-3f9004b172b5",
+            "when": null,
+            "workflow_outputs": [
+                {
+                    "label": "output1",
+                    "output_name": "output1",
+                    "uuid": "d8c2e65d-82b5-4ec9-a559-23632850ac7a"
+                }
+            ]
+        },
+        "5": {
+            "annotation": "",
+            "content_id": "CONVERTER_Bam_Bai_0",
+            "errors": null,
+            "id": 5,
+            "input_connections": {
+                "input1": {
+                    "id": 4,
+                    "output_name": "output1"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool Convert Bam to Bai",
+                    "name": "input1"
+                }
+            ],
+            "label": "Convert BAM to BAI",
+            "name": "Convert Bam to Bai",
+            "outputs": [
+                {
+                    "name": "output1",
+                    "type": "bai"
+                }
+            ],
+            "position": {
+                "left": 894.3413236534683,
+                "top": 162.79358859081242
+            },
+            "post_job_actions": {},
+            "tool_id": "CONVERTER_Bam_Bai_0",
+            "tool_state": "{\"input1\": {\"__class__\": \"RuntimeValue\"}, \"__page__\": 0, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "1.0.1",
+            "type": "tool",
+            "uuid": "816367a7-d3d5-4783-9d1f-43aade58ece6",
+            "when": null,
+            "workflow_outputs": []
+        }
+    },
+    "tags": [],
+    "uuid": "8ffcbc0c-b66f-4f82-8780-617ffbead0a4",
+    "version": 5
+}
